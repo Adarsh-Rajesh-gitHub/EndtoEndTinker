@@ -8,6 +8,8 @@
 #include <ctype.h>
 #include <inttypes.h>
 #include <errno.h>
+#define FAIL do {fprintf(stderr, "Simulation error\n"); return 1;} while(0)
+
 
 //memory of the simulation
 uint8_t memory[512*1024] = {0};
@@ -255,7 +257,7 @@ int main(int argc, char *argv[]) {
 
 
 
-    //reads in input from file
+    //reads in input from file and validation
     uint64_t pc;
     //size_t itemsRead = fread(&memory[pc], sizeof(uint32_t), (sizeof(memory)-pc)/sizeof(uint32_t), fp);
     uint64_t fileType;
@@ -263,14 +265,20 @@ int main(int argc, char *argv[]) {
     uint64_t codeSize;
     uint64_t dataStart;
     uint64_t dataSize;
-    fread(&fileType, sizeof(uint64_t), 1, fp);
-    fread(&codeStart, sizeof(uint64_t), 1, fp);
-    fread(&codeSize, sizeof(uint64_t), 1, fp);
-    fread(&dataStart, sizeof(uint64_t), 1, fp);
-    fread(&dataSize, sizeof(uint64_t), 1, fp);
+    if(fread(&fileType, sizeof(uint64_t), 1, fp) != 1) FAIL;
+    if(fread(&codeStart, sizeof(uint64_t), 1, fp) != 1) FAIL;
+    if(fread(&codeSize, sizeof(uint64_t), 1, fp) != 1) FAIL;
+    if(fread(&dataStart, sizeof(uint64_t), 1, fp) != 1) FAIL;
+    if(fread(&dataSize, sizeof(uint64_t), 1, fp) != 1) FAIL;
+    if (badMem(codeStart,(int)codeSize)) FAIL;
+    if (badMem(dataStart,(int)dataSize)) FAIL;
+    if(codeSize % 4 != 0) FAIL;
+    if(dataSize % 8 != 0) FAIL;
+    if(codeSize > dataStart - codeStart) FAIL;
+    if(dataSize > 512*1024-codeStart) FAIL;
     pc = codeStart;
-    fread(&memory[pc], codeSize, 1, fp);
-    fread(&memory[dataStart],dataSize, 1, fp);
+    if(fread(&memory[pc], codeSize, 1, fp) != codeSize) FAIL;
+    if(fread(&memory[dataStart],dataSize, 1, fp) != dataSize) FAIL;
     registers[31] = sizeof(memory);
     fclose(fp);
 
