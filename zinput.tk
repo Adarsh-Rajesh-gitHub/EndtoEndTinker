@@ -1,0 +1,36 @@
+.code
+; n = 1 (change this literal to test other n)
+	xor r2, r2, r2
+	addi r2, 1
+
+; a = 0, b = 1
+	xor r0, r0, r0
+	xor r1, r1, r1
+	addi r1, 1
+
+; load label addresses
+	ld  r4, :LOOP_BODY
+	ld  r5, :DONE
+
+:LOOP
+; if n > 0, go run the body, else done
+	brgt r4, r2, r0
+	br   r5
+
+:LOOP_BODY
+; b = a + b
+	add  r1, r0, r1
+; a = b - a
+	sub  r0, r1, r0
+; n--
+	subi r2, 1
+; back to LOOP
+	ld  r6, :LOOP
+	br  r6
+
+:DONE
+; output port = 1 in r6
+	xor  r6, r6, r6
+	addi r6, 1
+	priv r6, r1, r0, 4
+	halt

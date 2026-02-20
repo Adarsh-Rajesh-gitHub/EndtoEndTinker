@@ -1,0 +1,38 @@
+
+#ifndef tinker_h
+#define tinker_h
+#include <stdint.h>   
+
+typedef struct {
+    char* label;
+    int memory;
+} Pair;
+
+typedef struct {
+    int size;
+    Pair* entries;
+} hashMap;
+
+typedef struct {
+    int size;
+    int numElements;
+    char (*entries)[256];
+} List;
+void clearList(List* l);
+void add(List* l, const char* line);
+List* createList();
+Pair* createPair(char* label, int memory);
+hashMap* createHashMap();
+void insert(hashMap* hM, char* label, int memory);
+int find(hashMap* hM, char* label);
+
+
+//for teseting
+int parse_u64_strict(const char *s,uint64_t *out);
+int commaSpace(const char *s);
+int validLabel(const char*);
+int op_is(const char *line, const char *op, const char **after_op);
+
+
+
+#endif
