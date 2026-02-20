@@ -1,0 +1,34 @@
+;r0 will always stay 0
+.code
+	in r1, r0
+	ld r29, 1
+	ld r28, 2
+	ld r24, :Case1
+	brgt r24, r29, r1
+	ld r24, :Case2
+	brgt r24, r28, r1
+	subi r1, 1
+;let 4 be the main
+;2 and 3 will be prev 1 and 2 respectively
+	ld r2, 0
+	ld r3, 1
+:Loop
+	add r4, r2, r3
+	add r2, r0, r3
+	add r3, r0, r4
+	subi r1, 1
+	ld r24, :Loop
+	brgt r24, r1, r0
+	ld r27, 1
+	out r27, r4
+	halt
+:Case1
+	ld r27, 1
+	ld r26, 0
+	out r27, r26
+	halt
+:Case2
+	ld r27, 1
+	ld r26, 1
+	out r27, r26
+	halt
