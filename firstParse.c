@@ -486,7 +486,7 @@ for(int i = 0; i < intermediate->numElements; i++) {
         mode= -1; 
         continue;
     } 
-    if(mode == 0) {
+    if(mode == 0 || mode == -1) {
         continue;
     }
     if(mode == 1) {
@@ -914,12 +914,21 @@ return 1;
         forProg4++;
 
         }
+    }
+    for(int i = 0; i < intermediate->numElements; i++) {
+        if(strncmp(intermediate->entries[i], ".code", 5) == 0 && intermediate->entries[i][5] == '\0'){
+            mode = 1; 
+            continue;
+        } 
+        if(strncmp(intermediate->entries[i], ".data", 5) == 0 && intermediate->entries[i][5] == '\0'){
+            mode= -1; 
+            continue;
+        } 
         if(mode==-1){
             uint64_t val=0;
             const char *ds=intermediate->entries[i]+1;
             if(!parse_u64_strict(ds,&val)) failed("invalid data");
             fwrite(&val,8,1,out);
-            continue;
         }
     }
 
