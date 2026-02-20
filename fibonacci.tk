@@ -1,7 +1,7 @@
 ;r0 will always stay 0
 .code
 	in r1, r0
-	r1 subi 1
+	subi r1 1
 	ld r29, 1
 	ld r28, 2
 	ld r24, :Case1
