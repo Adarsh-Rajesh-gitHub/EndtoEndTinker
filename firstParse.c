@@ -19,6 +19,13 @@ uint64_t codeSize;
 uint64_t dataStart = 0x10000;
 uint64_t dataSize;
 
+static int commaCount(const char *s){
+    int c=0;
+    for(;*s;s++){
+        if(*s==',') c++;
+    }
+    return c;
+}
 
 int forProg4 = 0;
  int parse_u64_strict(const char *s,uint64_t *out){
@@ -323,10 +330,14 @@ int main(int argc, char* args[]) {
             continue;
         }
 
+        
         //expanding the macros
         char *cur = lis->entries[i];
+        int commas = commaCount(cur+1);
+
         char tmp[256];
         snprintf(tmp, sizeof(tmp), "%s", cur + 1);     
+        
         for (int k = 0; tmp[k]; k++) {
             if (tmp[k] == ',' || tmp[k] == '(' || tmp[k] == ')') tmp[k] = ' ';
         }
@@ -347,6 +358,7 @@ int main(int argc, char* args[]) {
         //in
         n=0;
         if(sscanf(tmp,"in r%d r%d %n",&rd,&rs,&n)==2&&tmp[n]=='\0'){
+            if(commas != 1) failed("invalid in");
             char b[64];snprintf(b,sizeof(b),"\tpriv r%d, r%d, r0, 3",rd,rs);
             add(intermediate,strdup(b));
             continue;
@@ -355,6 +367,7 @@ int main(int argc, char* args[]) {
         //out
         n=0;
         if(sscanf(tmp,"out r%d r%d %n",&rd,&rs,&n)==2&&tmp[n]=='\0'){
+            if(commas != 1) failed("invalid out");
             char b[64];snprintf(b,sizeof(b),"\tpriv r%d, r%d, r0, 4",rd,rs);
             add(intermediate,strdup(b));
             continue;
@@ -387,6 +400,7 @@ int main(int argc, char* args[]) {
         n=0;
         unsigned long long Lu=0;
         if(sscanf(tmp,"ld r%d %llu %n",&rd,&Lu,&n)==2&&tmp[n]=='\0'){
+            if(commas != 1) failed("invalid ld");
             uint64_t L=(uint64_t)Lu;
             if(sscanf(tmp, "%*s r%d %llu", &rd, &Lu) != 2) {
                 fprintf(stderr, "error: malformed ld\n"); exit(1);
