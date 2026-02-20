@@ -270,12 +270,12 @@ int main(int argc, char *argv[]) {
     if(fread(&codeSize, sizeof(uint64_t), 1, fp) != 1) FAIL;
     if(fread(&dataStart, sizeof(uint64_t), 1, fp) != 1) FAIL;
     if(fread(&dataSize, sizeof(uint64_t), 1, fp) != 1) FAIL;
-    if (badMem(codeStart,(int)codeSize)) FAIL;
-    if(codeSize % 4 != 0) FAIL;
-    if(dataSize % 8 != 0) FAIL;
-    if(dataStart % 8 != 0) FAIL;
-    if(codeSize > dataStart - codeStart) FAIL;
-    if(dataSize > 512*1024-dataStart) FAIL;
+    // if (badMem(codeStart,(int)codeSize)) FAIL;
+    // if(codeSize % 4 != 0) FAIL;
+    // if(dataSize % 8 != 0) FAIL;
+    // if(dataStart % 8 != 0) FAIL;
+    // if(codeSize > dataStart - codeStart) FAIL;
+    // if(dataSize > 512*1024-dataStart) FAIL;
     pc = codeStart;
     if(fread(&memory[pc], codeSize, 1, fp) != 1) FAIL;
     if(fread(&memory[dataStart],dataSize, 1, fp) != 1) FAIL;
