@@ -240,7 +240,7 @@ int execute(uint32_t instruction, uint64_t *pc) {
 int main(int argc, char *argv[]) {
 
     //file input 
-
+    
     if(argc != 2) {
         fprintf(stderr, "Invalid tinker filepath\n");
         return 1;
@@ -250,13 +250,29 @@ int main(int argc, char *argv[]) {
     if(!fp) {
         fprintf(stderr, "Invalid tinker filepath\n");
         return 1;
-    }
+    }   
+
+
+
+
     //reads in input from file
-    uint64_t pc = 0x1000;
-    size_t itemsRead = fread(&memory[pc], sizeof(uint32_t), (sizeof(memory)-pc)/sizeof(uint32_t), fp);
-    fclose(fp);
-    int end = itemsRead + 0x1000;
+    uint64_t pc;
+    //size_t itemsRead = fread(&memory[pc], sizeof(uint32_t), (sizeof(memory)-pc)/sizeof(uint32_t), fp);
+    uint64_t fileType;
+    uint64_t codeStart;
+    uint64_t codeSize;
+    uint64_t dataStart;
+    uint64_t dataSize;
+    fread(&fileType, sizeof(uint64_t), 1, fp);
+    fread(&codeStart, sizeof(uint64_t), 1, fp);
+    fread(&codeSize, sizeof(uint64_t), 1, fp);
+    fread(&dataStart, sizeof(uint64_t), 1, fp);
+    fread(&dataSize, sizeof(uint64_t), 1, fp);
+    pc = codeStart;
+    fread(&memory[pc], codeSize, 1, fp);
+    fread(&memory[dataStart],dataSize, 1, fp);
     registers[31] = sizeof(memory);
+    fclose(fp);
 
     while(1) {
         uint32_t instruction;
