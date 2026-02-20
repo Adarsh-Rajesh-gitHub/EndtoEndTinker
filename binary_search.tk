@@ -58,36 +58,36 @@
 	ld r24, :Search
 	br r24
 :Found
-	ld r27 3
-	ld r26 102
-	out r27 r26
-	ld r26 111
-	out r27 r26
-	ld r26 117
-	out r27 r26
-	ld r26 110
-	out r27 r26
-	ld r26 100
-	out r27 r26
+	ld r27, 3
+	ld r26, 102
+	out r27, r26
+	ld r26, 111
+	out r27, r26
+	ld r26, 117
+	out r27, r26
+	ld r26, 110
+	out r27, r26
+	ld r26, 100
+	out r27, r26
 	halt
 :notFound
-	ld r27 3
-	ld r26 110
-	out r27 r26
-	ld r26 111
-	out r27 r26
-	ld r26 116
-	out r27 r26
-	ld r26 32
-	out r27 r26
-	ld r26 102
-	out r27 r26
-	ld r26 111
-	out r27 r26
-	ld r26 117
-	out r27 r26
-	ld r26 110
-	out r27 r26
-	ld r26 100
-	out r27 r26
+	ld r27, 3
+	ld r26, 110
+	out r27, r26
+	ld r26, 111
+	out r27, r26
+	ld r26, 116
+	out r27, r26
+	ld r26, 32
+	out r27, r26
+	ld r26, 102
+	out r27, r26
+	ld r26, 111
+	out r27, r26
+	ld r26, 117
+	out r27, r26
+	ld r26, 110
+	out r27, r26
+	ld r26, 100
+	out r27, r26
 	halt
