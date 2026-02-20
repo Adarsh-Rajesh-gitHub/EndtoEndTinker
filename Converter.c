@@ -277,8 +277,12 @@ int main(int argc, char *argv[]) {
     // if(codeSize > dataStart - codeStart) FAIL;
     // if(dataSize > 512*1024-dataStart) FAIL;
     pc = codeStart;
-    if(fread(&memory[pc], codeSize, 1, fp) != 1) FAIL;
-    if(fread(&memory[dataStart],dataSize, 1, fp) != 1) FAIL;
+    if(codeSize != 0) {
+        if(fread(&memory[pc], codeSize, 1, fp) != 1) FAIL;
+    }
+    if(dataSize != 0) {
+        if(fread(&memory[dataStart], dataSize, 1, fp) != 1) FAIL;
+    }
     registers[31] = sizeof(memory);
     fclose(fp);
 
