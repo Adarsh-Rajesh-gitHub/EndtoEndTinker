@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define TESTING
-#include "Converter.c"   // change to your simulator filename
+#include "Converter.c"   
 
 static void makeBin(const char *path,const void *bytes,size_t n){
     FILE *fp=fopen(path,"wb");
@@ -57,7 +57,6 @@ int main(void){
         assert(readStrict(&x)==0);
     }
 
-    //execute: sanity check a couple ops (same vibe as your old tests)
     {
         uint64_t pc=0x1000;
         memset(registers,0,sizeof(registers));
@@ -77,15 +76,13 @@ int main(void){
         assert(registers[3]==7);
     }
 
-    //header validation integration: make an obviously-invalid bin (bad codeStart)
-    //Your main should FAIL (nonzero).
     {
         uint64_t hdr[5];
-        hdr[0]=0;        //fileType
-        hdr[1]=0x1004;   //codeStart (not 0x1000-aligned per your badMem)
-        hdr[2]=4;        //codeSize
-        hdr[3]=0x10000;  //dataStart
-        hdr[4]=0;        //dataSize
+        hdr[0]=0;       
+        hdr[1]=0x1004;  
+        hdr[2]=4;       
+        hdr[3]=0x10000;  
+        hdr[4]=0;       
         makeBin("bad.bin",hdr,sizeof(hdr));
 
         int rc=system("./hw5-sim bad.bin > sim_out.txt 2> sim_err.txt");
